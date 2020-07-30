@@ -84,8 +84,9 @@ function New-Csr {
 
     # create the extensions we care about
     $basicConstraints = New-Object Org.BouncyCastle.Asn1.X509.X509Extension($false, (New-Object Org.BouncyCastle.Asn1.DerOctetString(New-Object Org.BouncyCastle.Asn1.X509.BasicConstraints($false))))
-    $keyUsage = New-Object Org.BouncyCastle.Asn1.X509.X509Extension($true, (New-Object Org.BouncyCastle.Asn1.DerOctetString(New-Object Org.BouncyCastle.Asn1.X509.KeyUsage([Org.BouncyCastle.Asn1.X509.KeyUsage]::DigitalSignature -bor [Org.BouncyCastle.Asn1.X509.KeyUsage]::KeyEncipherment))))
-    $extKeyUsage = New-Object Org.BouncyCastle.Asn1.X509.X509Extension($false, (New-Object Org.BouncyCastle.Asn1.DerOctetString(New-Object Org.BouncyCastle.Asn1.X509.ExtendedKeyUsage([Org.BouncyCastle.Asn1.X509.KeyPurposeID]::IdKPServerAuth, [Org.BouncyCastle.Asn1.X509.KeyPurposeID]::IdKPClientAuth))))
+    # Not required
+    # $keyUsage = New-Object Org.BouncyCastle.Asn1.X509.X509Extension($true, (New-Object Org.BouncyCastle.Asn1.DerOctetString(New-Object Org.BouncyCastle.Asn1.X509.KeyUsage([Org.BouncyCastle.Asn1.X509.KeyUsage]::DigitalSignature -bor [Org.BouncyCastle.Asn1.X509.KeyUsage]::KeyEncipherment))))
+    # $extKeyUsage = New-Object Org.BouncyCastle.Asn1.X509.X509Extension($false, (New-Object Org.BouncyCastle.Asn1.DerOctetString(New-Object Org.BouncyCastle.Asn1.X509.ExtendedKeyUsage([Org.BouncyCastle.Asn1.X509.KeyPurposeID]::IdKPServerAuth, [Org.BouncyCastle.Asn1.X509.KeyPurposeID]::IdKPClientAuth))))
     $genNames = @()
     $allSANs = @($Order.MainDomain); if ($Order.SANs.Count -gt 0) { $allSANs += @($Order.SANs) }
     foreach ($name in $allSANs) { $genNames += New-Object Org.BouncyCastle.Asn1.X509.GeneralName([Org.BouncyCastle.Asn1.X509.GeneralName]::DnsName, $name) }
@@ -94,8 +95,8 @@ function New-Csr {
 
     # add them to a DerSet object
     $extDict.Add([Org.BouncyCastle.Asn1.X509.X509Extensions]::BasicConstraints, $basicConstraints)
-    $extDict.Add([Org.BouncyCastle.Asn1.X509.X509Extensions]::KeyUsage, $keyUsage)
-    $extDict.Add([Org.BouncyCastle.Asn1.X509.X509Extensions]::ExtendedKeyUsage, $extKeyUsage)
+    # $extDict.Add([Org.BouncyCastle.Asn1.X509.X509Extensions]::KeyUsage, $keyUsage)
+    # $extDict.Add([Org.BouncyCastle.Asn1.X509.X509Extensions]::ExtendedKeyUsage, $extKeyUsage)
     $extDict.Add([Org.BouncyCastle.Asn1.X509.X509Extensions]::SubjectAlternativeName, $sans)
     $extDict.Add([Org.BouncyCastle.Asn1.X509.X509Extensions]::SubjectKeyIdentifier, $ski)
 
